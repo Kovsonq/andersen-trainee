@@ -2,11 +2,11 @@ package Structural.Bridge.Problem;
 
 public class IconWindow implements Window {
 
-    // this is how we can solve our problem for two implementation, we will use switch() for 3 of them
+    // this is how we can solve our ShopChain for two implementation, we will use switch() for 3 of them
     private boolean switchVersion;
 
     /**
-     * there is the problem - we don't know what kind of implementation (linux or directx) should we use.
+     * there is the ShopChain - we don't know what kind of implementation (linux or directx) should we use.
      * @param x
      * @param y
      * @param width
