@@ -1,59 +1,62 @@
 package sortalgorithms;
 
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 
+@Slf4j
 public class SortAlgorithms {
     public static void main(String[] args) {
+
         int size = 10000;
         int[] array = new int[size];
 
         for (int i = 0; i < array.length; i++) {
             array[i] = (int) (Math.random() * size);
         }
-        System.out.println("Original Array: " + Arrays.toString(array));
+        log.info("Original Array: " + Arrays.toString(array));
 
 
         //Bubble Sort
         int[] bubbleArray = Arrays.copyOf(array, array.length);
         long timeBeforeBubble = System.currentTimeMillis();
         bubbleSort(bubbleArray);
-        System.out.println("Bubble sort: \n" + Arrays.toString(bubbleArray));
+        log.info("Bubble sort: \n" + Arrays.toString(bubbleArray));
         long timeAfterBubble = System.currentTimeMillis();
 
         //Selection Sort
         int[] selectionArray = Arrays.copyOf(array, array.length);
         long timeBeforeSelection = System.currentTimeMillis();
         selectionSort(selectionArray);
-        System.out.println("Selection sort: \n" + Arrays.toString(selectionArray));
+        log.info("Selection sort: \n" + Arrays.toString(selectionArray));
         long timeAfterSelection = System.currentTimeMillis();
 
         //Insertion Sort
         int[] insertionArray = Arrays.copyOf(array, array.length);
         long timeBeforeInsertion = System.currentTimeMillis();
         insertionSort(insertionArray);
-        System.out.println("Insertion sort: \n" + Arrays.toString(insertionArray));
+        log.info("Insertion sort: \n" + Arrays.toString(insertionArray));
         long timeAfterInsertion = System.currentTimeMillis();
 
         //Shuffle Sort
         int[] shuttleArray = Arrays.copyOf(array, array.length);
         long timeBeforeShuttle = System.currentTimeMillis();
         shuttleSort(shuttleArray);
-        System.out.println("Shuttle sort: \n" + Arrays.toString(shuttleArray));
+        log.info("Shuttle sort: \n" + Arrays.toString(shuttleArray));
         long timeAfterShuttle = System.currentTimeMillis();
 
         //ShellBad Sort
         int[] shellBadArray = Arrays.copyOf(array, array.length);
         long timeBeforeShell = System.currentTimeMillis();
         shellSortBad(shellBadArray);
-        System.out.println("ShellBad sort: \n" + Arrays.toString(shellBadArray));
+        log.info("ShellBad sort: \n" + Arrays.toString(shellBadArray));
         long timeAfterShell = System.currentTimeMillis();
 
         //ShellGood Sort
         int[] shellGoodArray = Arrays.copyOf(array, array.length);
         long timeBeforeShellGood = System.currentTimeMillis();
         shellSortGood(shellGoodArray);
-        System.out.println("ShellGood sort: \n" + Arrays.toString(shellGoodArray));
+        log.info("ShellGood sort: \n" + Arrays.toString(shellGoodArray));
         long timeAfterShellGood = System.currentTimeMillis();
 
 
@@ -61,27 +64,27 @@ public class SortAlgorithms {
         int[] mergeArray = Arrays.copyOf(array, array.length);
         long timeBeforeMerge = System.currentTimeMillis();
         mergeSort(mergeArray, mergeArray.length);
-        System.out.println("Merge sort: \n" + Arrays.toString(mergeArray));
+        log.info("Merge sort: \n" + Arrays.toString(mergeArray));
         long timeAfterMerge = System.currentTimeMillis();
 
         //Quick Sort
         int[] quickArray = Arrays.copyOf(array, array.length);
         long timeBeforeQuick = System.currentTimeMillis();
         quickSort(quickArray, 0, quickArray.length - 1);
-        System.out.println("Quick sort: \n" + Arrays.toString(quickArray));
+        log.info("Quick sort: \n" + Arrays.toString(quickArray));
         long timeAfterQuick = System.currentTimeMillis();
 
-        System.out.println("\n------Simple sort algorithms-------");
-        System.out.println("Bubble sort time: " + (timeAfterBubble - timeBeforeBubble) + " ms");
-        System.out.println("Selection sort time: " + (timeAfterSelection - timeBeforeSelection) + " ms");
-        System.out.println("Insertion sort time: " + (timeAfterInsertion - timeBeforeInsertion) + " ms");
-        System.out.println("Shuttle sort time: " + (timeAfterShuttle - timeBeforeShuttle) + " ms");
-        System.out.println("ShellBad sort time: " + (timeAfterShell - timeBeforeShell) + " ms");
-        System.out.println("ShellGood sort time: " + (timeAfterShellGood - timeBeforeShellGood) + " ms");
+        log.info("\n------Simple sort algorithms-------");
+        log.info("Bubble sort time: " + (timeAfterBubble - timeBeforeBubble) + " ms");
+        log.info("Selection sort time: " + (timeAfterSelection - timeBeforeSelection) + " ms");
+        log.info("Insertion sort time: " + (timeAfterInsertion - timeBeforeInsertion) + " ms");
+        log.info("Shuttle sort time: " + (timeAfterShuttle - timeBeforeShuttle) + " ms");
+        log.info("ShellBad sort time: " + (timeAfterShell - timeBeforeShell) + " ms");
+        log.info("ShellGood sort time: " + (timeAfterShellGood - timeBeforeShellGood) + " ms");
 
-        System.out.println("\n------Medium sort algorithms-------");
-        System.out.println("Merge sort time: " + (timeAfterMerge - timeBeforeMerge) + " ms");
-        System.out.println("Quick sort time: " + (timeAfterQuick - timeBeforeQuick) + " ms");
+        log.info("\n------Medium sort algorithms-------");
+        log.info("Merge sort time: " + (timeAfterMerge - timeBeforeMerge) + " ms");
+        log.info("Quick sort time: " + (timeAfterQuick - timeBeforeQuick) + " ms");
 
     }
 
