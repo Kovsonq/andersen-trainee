@@ -1,5 +1,7 @@
 package chatimplementation;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,6 +9,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+@Slf4j
 public class Client {
 
     static final int PORT = 5000;
@@ -48,14 +51,14 @@ public class Client {
             System.exit(0);
 
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            log.error("Client IO or interrupted exception");
         } finally {
             try {
                 reader.close();
                 writer.close();
                 sock.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("Client thread closing error.");
             }
         }
     }
@@ -67,7 +70,7 @@ public class Client {
                 while ((message = reader.readLine()) != null){
                     System.out.println("Server's answer: " + message);
                 }
-            } catch (Exception e) {e.printStackTrace();}
+            } catch (Exception e) {log.error("Client lost server connection.");}
         }
     }
 
