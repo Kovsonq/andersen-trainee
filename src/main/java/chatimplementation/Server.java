@@ -1,5 +1,7 @@
 package chatimplementation;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,6 +9,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+@Slf4j
 public class Server {
 
     static final int PORT = 5000;
@@ -38,13 +41,13 @@ public class Server {
             }
 
         } catch (Exception exception){
-            exception.printStackTrace();
+            log.error("Server go method exception.");
         } finally {
             try {
                 serverSocket.close();
                 clientSocket.close();
             } catch (IOException ex) {
-                ex.printStackTrace();
+                log.error("Server threads closing exception.");
             }
         }
     }
@@ -60,7 +63,7 @@ public class Server {
                 InputStreamReader isReader = new InputStreamReader(sock.getInputStream());
                 reader = new BufferedReader(isReader);
                 writer = new PrintWriter(clientSocket.getOutputStream());
-            } catch (Exception exception) {exception.printStackTrace();}
+            } catch (Exception exception) {log.error("Client handler constructor exception.");}
         }
 
         public void run(){
@@ -73,14 +76,14 @@ public class Server {
                     writer.flush();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("ClientHandler lost client connection.");
             } finally {
                 try {
                     reader.close();
                     writer.close();
                     sock.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    log.error("Client handler closing exception.");
                 }
             }
         }
