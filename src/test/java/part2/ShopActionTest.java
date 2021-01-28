@@ -74,7 +74,19 @@ public class ShopActionTest {
         shopService.removeOneProductFromBucketByKey(bucket,1);
         shopService.addProductToBucket(bucket, productList, 1);
         assertEquals(2, bucket.size());
+    }
 
+    @Test
+    public void serializationAndDeserialization() {
+        assertTrue(bucket.isEmpty());
+        shopService.addProductToBucket(bucket,productList,1);
+        shopService.addProductToBucket(bucket,productList,4);
+        assertFalse(bucket.isEmpty());
+
+        shopService.saveCustomerBucket(bucket);
+        List<Product> bucketAfterSerializationDeserialization =
+                shopService.downloadCustomerBucket();
+        assertEquals(bucketAfterSerializationDeserialization, bucket);
     }
 
 }
