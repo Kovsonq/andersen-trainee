@@ -3,6 +3,8 @@ package part2;
 
 import org.junit.Before;
 import org.junit.Test;
+import part2.Product.User;
+import part2.Service.ShopConnection;
 import part2.Service.ShopService;
 import part2.Product.Food;
 import part2.Product.NoFood;
@@ -16,7 +18,11 @@ import static org.junit.Assert.*;
 public class ShopActionTest {
     ShopService shopService = new ShopService();
     Map<Integer, Product> productList = new HashMap<>();
-    List<Product> bucket = new LinkedList<>();
+    HashMap<User, List<Product>> bucket  = new HashMap<>();
+    List<Product> userBucket = new LinkedList<>();
+    User user = new User("Alex");
+
+    ShopConnection shopConnection = ShopConnection.getShopConnection();
 
     @Test
     public void addProductToTheWarehouseTest(){
@@ -34,6 +40,7 @@ public class ShopActionTest {
 
     @Before
     public void init(){
+        bucket.put(user, userBucket);
         productList.put(1, new Food("Bread", 4));
         productList.put(2, new Food("Tomato", 5));
         productList.put(3, new Food("Potato", 2));
@@ -43,64 +50,78 @@ public class ShopActionTest {
     }
 
     @Test
+    public void saveProductFromBucketToTheDBAndTakeFromTest(){
+//        shopConnection.createTriggerForAnalyticsTable();
+//        shopConnection.createUserHistoryProcedure();
+        user = shopService.badAuthorization(user.getName());
+        bucket.put(user, shopService.downloadCustomerBucket(user));
+//        assertTrue(bucket.get(user).isEmpty());
+        shopService.addProductToBucket(user, bucket, productList,1);
+        shopService.addProductToBucket(user, bucket, productList,4);
+        shopConnection.confirmOrder(user,1,"RUR",bucket);
+        shopConnection.callUserHistoryProcedure(user);
+        shopConnection.totalUserSpentMoney(user);
+    }
+
+    @Test
     public void addProductToTheBucketTest(){
-        assertTrue(bucket.isEmpty());
-        shopService.addProductToBucket(bucket,productList,1);
-        shopService.addProductToBucket(bucket,productList,4);
-        assertEquals(productList.get(4) ,bucket.get(1));
+        assertTrue(bucket.get(user).isEmpty());
+        shopService.addProductToBucket(user, bucket, productList,1);
+        shopService.addProductToBucket(user, bucket, productList,4);
+        assertEquals(productList.get(4) ,bucket.get(user).get(1));
     }
 
     @Test
     public void removeOneProductFromBucketTest(){
-        assertTrue(bucket.isEmpty());
-        shopService.addProductToBucket(bucket,productList,1);
-        shopService.addProductToBucket(bucket,productList,4);
-        assertEquals(2, bucket.size());
+        assertTrue(bucket.get(user).isEmpty());
+        shopService.addProductToBucket(user, bucket,productList,1);
+        shopService.addProductToBucket(user, bucket,productList,4);
+        assertEquals(2, bucket.get(user).size());
 
-        shopService.removeOneProductFromBucketByKey(bucket,0);
-        assertEquals(1, bucket.size());
+        shopService.removeOneProductFromBucketByKey(user, bucket,0);
+        assertEquals(1, bucket.get(user).size());
 
-        shopService.removeOneProductFromBucketByKey(bucket,0);
-        assertTrue(bucket.isEmpty());
+        shopService.removeOneProductFromBucketByKey(user, bucket,0);
+        assertTrue(bucket.get(user).isEmpty());
     }
 
     @Test
     public void removeAllProductFromBucketTest() {
-        assertTrue(bucket.isEmpty());
-        shopService.addProductToBucket(bucket, productList, 1);
-        shopService.addProductToBucket(bucket, productList, 4);
-        assertFalse(bucket.isEmpty());
-        shopService.removeAllProductFromBucket(bucket);
-        assertTrue(bucket.isEmpty());
+        assertTrue(bucket.get(user).isEmpty());
+        shopService.addProductToBucket(user, bucket, productList, 1);
+        shopService.addProductToBucket(user, bucket, productList, 4);
+        assertFalse(bucket.get(user).isEmpty());
+        shopService.removeAllProductFromBucket(user, bucket);
+        assertTrue(bucket.get(user).isEmpty());
     }
 
     @Test
     public void removeAndThenAddProductInBucketTest() {
-        assertTrue(bucket.isEmpty());
-        shopService.addProductToBucket(bucket, productList, 1);
-        shopService.addProductToBucket(bucket, productList, 4);
-        assertFalse(bucket.isEmpty());
+        assertTrue(bucket.get(user).isEmpty());
+        shopService.addProductToBucket(user, bucket, productList, 1);
+        shopService.addProductToBucket(user, bucket, productList, 4);
+        assertFalse(bucket.get(user).isEmpty());
 
-        shopService.removeOneProductFromBucketByKey(bucket,0);
-        shopService.addProductToBucket(bucket, productList, 2);
-        assertEquals(2, bucket.size());
+        shopService.removeOneProductFromBucketByKey(user, bucket,0);
+        shopService.addProductToBucket(user, bucket, productList, 2);
+        assertEquals(2, bucket.get(user).size());
 
-        shopService.removeOneProductFromBucketByKey(bucket,1);
-        shopService.addProductToBucket(bucket, productList, 1);
-        assertEquals(2, bucket.size());
+        shopService.removeOneProductFromBucketByKey(user, bucket,1);
+        shopService.addProductToBucket(user, bucket, productList, 1);
+        assertEquals(2, bucket.get(user).size());
     }
 
     @Test
     public void serializationAndDeserialization() {
-        assertTrue(bucket.isEmpty());
-        shopService.addProductToBucket(bucket,productList,1);
-        shopService.addProductToBucket(bucket,productList,4);
-        assertFalse(bucket.isEmpty());
+        assertTrue(bucket.get(user).isEmpty());
+        shopService.addProductToBucket(user, bucket,productList,1);
+        shopService.addProductToBucket(user, bucket,productList,4);
+        assertFalse(bucket.get(user).isEmpty());
 
         shopService.saveCustomerBucket(bucket);
         List<Product> bucketAfterSerializationDeserialization =
-                shopService.downloadCustomerBucket();
-        assertEquals(bucketAfterSerializationDeserialization, bucket);
+                shopService.downloadCustomerBucket(user);
+        assertEquals(bucketAfterSerializationDeserialization, bucket.get(user));
     }
 
 }

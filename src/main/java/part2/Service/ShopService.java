@@ -2,12 +2,19 @@ package part2.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import part2.Product.Product;
+import part2.Product.User;
 import part2.Service.Concurrency.Concurrency;
 import part2.Service.Concurrency.RURConcurrency;
 import part2.Service.Concurrency.UAHConcurrency;
 import part2.Service.Concurrency.USDConcurrency;
 
 import java.io.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +22,7 @@ import java.util.Map;
 public class ShopService {
     private static Concurrency concurrency;
 
-    public void saveCustomerBucket(List<Product> bucket){
+    public void saveCustomerBucket(HashMap<User, List<Product>> bucket){
         try {
             FileOutputStream fos = new FileOutputStream("customerBucket.bin");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -28,18 +35,19 @@ public class ShopService {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Product> downloadCustomerBucket(){
-        List<Product> bucket = null;
+    public List<Product> downloadCustomerBucket(User user){
+        List<Product> userBucket = new LinkedList<>();
         try {
             FileInputStream fis = new FileInputStream("customerBucket.bin");
             ObjectInputStream ois = new ObjectInputStream(fis);
-            bucket = (List<Product>) ois.readObject();
+            HashMap<User, List<Product>> bucket = (HashMap<User, List<Product>>) ois.readObject();
+            userBucket = bucket.get(user);
             ois.close();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            log.error("IOException during serialization." + e.getMessage());
         }
         System.out.println("Your bucket downloaded");
-        return bucket;
+        return userBucket;
     }
 
     public double countBoughtPrice(double price, String paymentMethod) throws IllegalArgumentException {
@@ -68,31 +76,35 @@ public class ShopService {
         productList.forEach((K, V) -> System.out.println(K + " " + V.getName() + " " + V.getPrice() + " BYN "));
     }
 
-    public void showBucket(List<Product> bucket) {
+    public void showBucket(User user, HashMap<User, List<Product>> bucket) {
+        List<Product> userBucket = bucket.get(user);
         System.out.println("Your bucket:");
-        if (bucket.isEmpty()) {
+        if (userBucket.isEmpty()) {
             System.out.println("Empty");
         } else
-            for (int i = 0; i < bucket.size(); i++) {
-                System.out.println(i + " " + bucket.get(i).getName() + " " + bucket.get(i).getPrice() + " BYN");
+            for (int i = 0; i < userBucket.size(); i++) {
+                System.out.println(i + " " + userBucket.get(i).getName() + " " + userBucket.get(i).getPrice() + " BYN");
             }
     }
 
-    public void addProductToBucket(List<Product> bucket, Map<Integer, Product> productList, Integer order) {
-        bucket.add(productList.get(order));
+    public void addProductToBucket(User user, HashMap<User, List<Product>> bucket, Map<Integer, Product> productList, Integer order) {
+        List<Product> userBucket = bucket.get(user);
+        userBucket.add(productList.get(order));
         System.out.println("Product " + productList.get(order).getName() +
                 " " + productList.get(order).getPrice() + " BYN was added.");
     }
 
-    public void removeOneProductFromBucketByKey(List<Product> bucket, int remove) {
-        String productName = bucket.get(remove).getName();
-        double productPrice = bucket.get(remove).getPrice();
-        bucket.remove(remove);
+    public void removeOneProductFromBucketByKey(User user, HashMap<User, List<Product>> bucket, int remove) {
+        List<Product> userBucket = bucket.get(user);
+        String productName = userBucket.get(remove).getName();
+        double productPrice = userBucket.get(remove).getPrice();
+        userBucket.remove(remove);
         System.out.println("Product " + productName + " " + productPrice + " BYN was removed.");
     }
 
-    public void removeAllProductFromBucket(List<Product> bucket) {
-        bucket.clear();
+    public void removeAllProductFromBucket(User user, HashMap<User, List<Product>> bucket) {
+        List<Product> userBucket = bucket.get(user);
+        userBucket.clear();
         System.out.println("All products were removed from the bucket.");
     }
 
@@ -100,9 +112,30 @@ public class ShopService {
         System.out.println("Describing workflow of the Shop:" +
                 "\n - enter 'c' to view the catalogs " +
                 "\n - enter 'b' to view your bucket " +
-                "\n - type 'exit' to close this app" +
-                "\n - type 'download' to download your last bucket");
+                "\n - enter 'history' to view your shop history " +
+                "\n - type 'exit' to close this app");
     }
+
+    @SuppressWarnings("unchecked")
+    public User badAuthorization(String name){
+        User user = new User(name);
+        try {
+            FileInputStream fis = new FileInputStream("customerBucket.bin");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            HashMap<User, List<Product>> bucket = (HashMap<User, List<Product>>) ois.readObject();
+            for (HashMap.Entry<User, List<Product>> entry : bucket.entrySet()){
+                if (entry.getKey().getName().equals(name)){
+                    user = entry.getKey();
+                    System.out.println(name + ", hello again");
+                }
+            }
+            ois.close();
+        } catch (IOException | ClassNotFoundException e) {
+            log.error("That's first start of the app, hello customer!");
+        }
+        return user;
+    }
+
 
 
 }
