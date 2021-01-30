@@ -41,12 +41,14 @@ public class ShopService {
             FileInputStream fis = new FileInputStream("customerBucket.bin");
             ObjectInputStream ois = new ObjectInputStream(fis);
             HashMap<User, List<Product>> bucket = (HashMap<User, List<Product>>) ois.readObject();
-            userBucket = bucket.get(user);
+            if (bucket.get(user) != null) {
+                userBucket = bucket.get(user);
+                System.out.println("Your bucket downloaded");
+            } else System.out.println("Your bucket created");
             ois.close();
         } catch (IOException | ClassNotFoundException e) {
             log.error("IOException during serialization." + e.getMessage());
         }
-        System.out.println("Your bucket downloaded");
         return userBucket;
     }
 
