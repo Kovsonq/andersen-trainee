@@ -1,8 +1,10 @@
 package part2;
 
-import part2.product.Food;
-import part2.product.NoFood;
-import part2.product.Product;
+
+import part2.Product.Food;
+import part2.Product.NoFood;
+import part2.Product.Product;
+
 import part2.Service.ShopService;
 
 import java.util.*;
@@ -31,62 +33,104 @@ public class ShopRunner {
             switch (action) {
                 //exit case
                 case "exit":
+
+                    shopService.saveCustomerBucket(bucket);
                     System.exit(0);
 
-                    //show productList
+                case "download":
+                    bucket = shopService.downloadCustomerBucket();
+                    break;
+
+                //show productList
                 case "c": {
                     shopService.showProductList(productList);
 
-                    //add product in the bucket
+                    //add Product in the bucket
                     String order;
-                    while (true){
+                    while (true) {
+
                         order = input.nextLine();
                         if (order.equalsIgnoreCase("finish")) break;
                         if (order.matches("[0-9]*") && productList.containsKey(Integer.parseInt(order))) {
                             shopService.addProductToBucket(bucket, productList, Integer.parseInt(order));
-                        } else System.out.println("Can't find any product by this key");
+
+                        } else System.out.println("Can't find any Product by this key");
+
                     }
                     shopService.showHome();
                     break;
                 }
 
-                // show product in your bucket
+
+                // show Product in your bucket
                 case "b": {
                     System.out.println("Type: \n" +
-                            "- 'index' if you want to remove a product from the bucket \n" +
+                            "- 'buy' if you want to buy smth from bucket\n" +
+                            "- 'index' if you want to remove a Product from the bucket \n" +
                             "- 'all' to clear your bucket\n" +
                             "- 'finish' to go home");
                     shopService.showBucket(bucket);
 
-                    //delete product from bucket
-                    String remove;
+
+                    //Workflow in the bucket
                     while (true) {
                         if (bucket.isEmpty()) break;
 
-                        remove = input.nextLine();
+                        String remove = input.nextLine();
 
                         if (remove.equalsIgnoreCase("finish")) break;
 
-                        else if (remove.equalsIgnoreCase("all")) {
-                                shopService.removeAllProductFromBucket(bucket);
-                                shopService.showBucket(bucket);
-                            } else if (remove.matches("[0-9]*")) {
-                                shopService.removeOneProductFromBucketByKey(bucket, Integer.parseInt(remove));
-                                shopService.showBucket(bucket);
-                            } else System.out.println("Can't find any product by this key");
-                        }
-                    shopService.showHome();
-                        break;
+                        else if (remove.equalsIgnoreCase("buy")) {
+                            System.out.println("Please, select 'index' of item you want to buy");
+                            String item = input.nextLine();
 
-                }
+                            System.out.println("Please, select concurrency for payment\n" +
+                                    "- 0 BYN\n" +
+                                    "- 1 RUR\n" +
+                                    "- 2 UAH\n" +
+                                    "- 3 USD");
+                            String concurrency = input.nextLine();
 
-                // error input
-                default:
-                    System.out.println("You typed wrong symbol, try again");
+                            String moneyType = "BYN";
+                            switch (concurrency) {
+                                case "1":
+                                    moneyType = "RUR";
+                                    break;
+                                case "2":
+                                    moneyType = "UAH";
+                                    break;
+                                case "3":
+                                    moneyType = "USD";
+                                    break;
+                            }
+                            try {
+                                double price = shopService.countBoughtPrice(bucket.get(Integer.parseInt(item)).getPrice(), concurrency);
+                                System.out.println("Your price for " +
+                                        bucket.get(Integer.parseInt(item)).getName() + " is: " + price + " " + moneyType);
+                                break;
+                            } catch (IllegalArgumentException exception) {
+                                System.out.println("Illegal index of concurrency");
+                            }
+                        } else if (remove.equalsIgnoreCase("all")) {
+                            shopService.removeAllProductFromBucket(bucket);
+                            shopService.showBucket(bucket);
+                        } else if (remove.matches("[0-9]*")) {
+                            shopService.removeOneProductFromBucketByKey(bucket, Integer.parseInt(remove));
+                            shopService.showBucket(bucket);
+                        } else System.out.println("Can't find any Product by this key");
+                    }
                     shopService.showHome();
                     break;
-            }
+                }
 
+            // error input
+            default:
+                System.out.println("You typed wrong symbol, try again");
+                shopService.showHome();
+                break;
         }
+
     }
 }
+}
+

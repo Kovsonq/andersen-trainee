@@ -4,14 +4,14 @@ package part2;
 import org.junit.Before;
 import org.junit.Test;
 import part2.Service.ShopService;
-import part2.product.Food;
-import part2.product.NoFood;
-import part2.product.Product;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import part2.Product.Food;
+import part2.Product.NoFood;
+import part2.Product.Product;
+import part2.Warehouse.Warehouse;
+
+import java.util.*;
+
 
 import static org.junit.Assert.*;
 
@@ -19,6 +19,21 @@ public class ShopActionTest {
     ShopService shopService = new ShopService();
     Map<Integer, Product> productList = new HashMap<>();
     List<Product> bucket = new LinkedList<>();
+
+
+    @Test
+    public void addProductToTheWarehouseTest(){
+        Warehouse warehouse = new Warehouse();
+
+        warehouse.addProductToWarehouse(new Food("Milk",2),1);
+        HashMap<Product,Integer> testWarehouse = warehouse.getWarehouseMap();
+        Food food = new Food();
+        for (Map.Entry<Product,Integer> entry : testWarehouse.entrySet()){
+            food = (Food) entry.getKey();
+        }
+        assertNotNull(food.getExpiredDate());
+    }
+
 
 
     @Before
@@ -77,6 +92,19 @@ public class ShopActionTest {
         shopService.removeOneProductFromBucketByKey(bucket,1);
         shopService.addProductToBucket(bucket, productList, 1);
         assertEquals(2, bucket.size());
+    }
+
+    @Test
+    public void serializationAndDeserialization() {
+        assertTrue(bucket.isEmpty());
+        shopService.addProductToBucket(bucket,productList,1);
+        shopService.addProductToBucket(bucket,productList,4);
+        assertFalse(bucket.isEmpty());
+
+        shopService.saveCustomerBucket(bucket);
+        List<Product> bucketAfterSerializationDeserialization =
+                shopService.downloadCustomerBucket();
+        assertEquals(bucketAfterSerializationDeserialization, bucket);
 
     }
 
