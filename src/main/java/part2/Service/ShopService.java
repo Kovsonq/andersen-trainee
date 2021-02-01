@@ -1,6 +1,7 @@
 package part2.Service;
 
 import lombok.extern.slf4j.Slf4j;
+import part2.DAO.ShopConnection;
 import part2.Product.Product;
 import part2.Product.User;
 import part2.Service.Concurrency.Concurrency;
@@ -21,6 +22,9 @@ import java.util.Map;
 @Slf4j
 public class ShopService {
     private static Concurrency concurrency;
+    private static final ShopConnection shopConnection = ShopConnection.getShopConnection();
+
+
 
     public void saveCustomerBucket(HashMap<User, List<Product>> bucket){
         try {
@@ -41,12 +45,14 @@ public class ShopService {
             FileInputStream fis = new FileInputStream("customerBucket.bin");
             ObjectInputStream ois = new ObjectInputStream(fis);
             HashMap<User, List<Product>> bucket = (HashMap<User, List<Product>>) ois.readObject();
-            userBucket = bucket.get(user);
+            if (bucket.get(user) != null) {
+                userBucket = bucket.get(user);
+                System.out.println("Your bucket downloaded");
+            } else System.out.println("Your bucket created");
             ois.close();
         } catch (IOException | ClassNotFoundException e) {
             log.error("IOException during serialization." + e.getMessage());
         }
-        System.out.println("Your bucket downloaded");
         return userBucket;
     }
 
@@ -136,6 +142,37 @@ public class ShopService {
         return user;
     }
 
+    public void confirmOrder(User user, Integer item, String moneyType, HashMap<User, List<Product>> bucket){
+        shopConnection.confirmOrder(user, item, moneyType, bucket);
+    }
+
+    public void totalUserSpentMoney(User user){
+        shopConnection.totalUserSpentMoney(user);
+    }
+
+    public void callUserHistoryProcedure(User user) {
+        shopConnection.callUserHistoryProcedure(user);
+    }
+
+    public HashMap<Integer, Product> getAllProductFromDB (){
+        return shopConnection.getAllProductFromDB();
+    }
+
+    public void addProductToProductList(String productName, double productPrice){
+        shopConnection.addProductToProductDbList(productName, productPrice);
+    }
+
+    public void deleteProductFromProductList(int productId) {
+        shopConnection.deleteProductFromProductDbList(productId);
+    }
+
+    public void addProductToBucketList(int productId) {
+        shopConnection.addProductToBucketDbList(productId);
+    }
+
+    public void deleteProductFromBucketDbList(int productInBucketId) {
+        shopConnection.deleteProductFromBucketDbList(productInBucketId);
+    }
 
 
 }

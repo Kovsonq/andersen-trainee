@@ -4,7 +4,7 @@ package part2;
 import org.junit.Before;
 import org.junit.Test;
 import part2.Product.User;
-import part2.Service.ShopConnection;
+import part2.DAO.ShopConnection;
 import part2.Service.ShopService;
 import part2.Product.Food;
 import part2.Product.NoFood;
@@ -21,8 +21,6 @@ public class ShopActionTest {
     HashMap<User, List<Product>> bucket  = new HashMap<>();
     List<Product> userBucket = new LinkedList<>();
     User user = new User("Alex");
-
-    ShopConnection shopConnection = ShopConnection.getShopConnection();
 
     @Test
     public void addProductToTheWarehouseTest(){
@@ -58,9 +56,19 @@ public class ShopActionTest {
 //        assertTrue(bucket.get(user).isEmpty());
         shopService.addProductToBucket(user, bucket, productList,1);
         shopService.addProductToBucket(user, bucket, productList,4);
-        shopConnection.confirmOrder(user,1,"RUR",bucket);
-        shopConnection.callUserHistoryProcedure(user);
-        shopConnection.totalUserSpentMoney(user);
+        shopService.confirmOrder(user,1,"RUR",bucket);
+        shopService.callUserHistoryProcedure(user);
+        shopService.totalUserSpentMoney(user);
+    }
+
+    @Test
+    public void getAllProductFromDB(){
+        System.out.println(shopService.getAllProductFromDB().entrySet());
+    }
+
+    @Test
+    public void addProductToTheDB(){
+        shopService.addProductToProductList("Malina",12.22);
     }
 
     @Test

@@ -8,18 +8,47 @@
         <servlet-name>Servlet</servlet-name>
         <servlet-class>part2.Servlets.GoodListServlet</servlet-class>
     </servlet>
-    
     <servlet-mapping>
         <servlet-name>Servlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
+
     <servlet>
-        <servlet-name>GoodListJsp</servlet-name>
-        <jsp-file>/good-list.jsp</jsp-file>
+        <servlet-name>AddProductToDbServlet</servlet-name>
+        <servlet-class>part2.Servlets.AddProductToDbServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>GoodListJsp</servlet-name>
-        <url-pattern>/good-list</url-pattern>
+        <servlet-name>AddProductToDbServlet</servlet-name>
+        <url-pattern>/add-product</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DeleteProductFromDbServlet</servlet-name>
+        <servlet-class>part2.Servlets.DeleteProductFromDbServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteProductFromDbServlet</servlet-name>
+        <url-pattern>/delete-product</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>AddProductToBucketDbServlet</servlet-name>
+        <servlet-class>part2.Servlets.AddProductToBucketDbServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddProductToBucketDbServlet</servlet-name>
+        <url-pattern>/add-product-to-bucket</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DeleteProductFromBucketDbServlet</servlet-name>
+        <servlet-class>part2.Servlets.DeleteProductFromBucketDbServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteProductFromBucketDbServlet</servlet-name>
+        <url-pattern>/delete-product-from-bucket</url-pattern>
+    </servlet-mapping>
+
 </web-app>

@@ -4,7 +4,7 @@ import part2.Product.Food;
 import part2.Product.NoFood;
 import part2.Product.Product;
 import part2.Product.User;
-import part2.Service.ShopConnection;
+import part2.DAO.ShopConnection;
 import part2.Service.ShopService;
 
 import java.util.*;
@@ -13,7 +13,6 @@ public class ShopRunner {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         ShopService shopService = new ShopService();
-        ShopConnection shopConnection = ShopConnection.getShopConnection();
 
         Map<Integer, Product> productList = new HashMap<>();
         HashMap<User, List<Product>> bucket = new HashMap<>();
@@ -44,8 +43,8 @@ public class ShopRunner {
 
                 //show history
                 case "history":
-                    shopConnection.callUserHistoryProcedure(user);
-                    shopConnection.totalUserSpentMoney(user);
+                    shopService.callUserHistoryProcedure(user);
+                    shopService.totalUserSpentMoney(user);
                     break;
 
                 //show productList
@@ -119,9 +118,7 @@ public class ShopRunner {
                                         break;
                                     } else if (confirm.equalsIgnoreCase("y")){
 
-                                        //todo save product to the DB
-                                        shopConnection.confirmOrder(user, Integer.parseInt(item), moneyType, bucket);
-
+                                        shopService.confirmOrder(user, Integer.parseInt(item), moneyType, bucket);
 
                                     } else System.out.println("Incorrect symbol: " + "'" + confirm + "'" + " try again.");
                                 }
