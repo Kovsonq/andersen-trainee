@@ -4,6 +4,7 @@ package part2;
 import org.junit.Before;
 import org.junit.Test;
 import part2.Service.ShopService;
+
 import part2.Product.Food;
 import part2.Product.NoFood;
 import part2.Product.Product;
@@ -11,12 +12,14 @@ import part2.Warehouse.Warehouse;
 
 import java.util.*;
 
+
 import static org.junit.Assert.*;
 
 public class ShopActionTest {
     ShopService shopService = new ShopService();
     Map<Integer, Product> productList = new HashMap<>();
     List<Product> bucket = new LinkedList<>();
+
 
     @Test
     public void addProductToTheWarehouseTest(){
@@ -30,6 +33,7 @@ public class ShopActionTest {
         }
         assertNotNull(food.getExpiredDate());
     }
+
 
 
     @Before
@@ -101,6 +105,7 @@ public class ShopActionTest {
         List<Product> bucketAfterSerializationDeserialization =
                 shopService.downloadCustomerBucket();
         assertEquals(bucketAfterSerializationDeserialization, bucket);
+
     }
 
 }

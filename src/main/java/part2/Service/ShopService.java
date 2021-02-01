@@ -1,5 +1,6 @@
 package part2.Service;
 
+
 import lombok.extern.slf4j.Slf4j;
 import part2.Product.Product;
 import part2.Service.Concurrency.Concurrency;
@@ -103,6 +104,5 @@ public class ShopService {
                 "\n - type 'exit' to close this app" +
                 "\n - type 'download' to download your last bucket");
     }
-
 
 }
