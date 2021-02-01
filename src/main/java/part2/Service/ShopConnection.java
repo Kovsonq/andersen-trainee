@@ -20,7 +20,7 @@ public class ShopConnection {
         try {
             this.connection = DriverManager.getConnection(url, login, password);
         } catch (SQLException ex) {
-            log.error("Database Connection Creation Failed : " + ex.getMessage());
+            log.error("Database Connection Creation Failed");
         }
     }
 
@@ -34,7 +34,7 @@ public class ShopConnection {
                     shopConnection = new ShopConnection();
                 }
             } catch (SQLException exception) {
-                log.error("Database Connection Closing Failed : " + exception.getMessage());
+                log.error("Database Connection Closing Failed");
             }
         }
         return shopConnection;
@@ -45,7 +45,7 @@ public class ShopConnection {
     }
 
     public void confirmOrder(User user, Integer item, String moneyType, HashMap<User, List<Product>> bucket) {
-        String sql = "INSERT INTO OrderConfirmed (UserId, UserName, ProductName, OrderPrice, OrderMoneyType) Values (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Order_Confirmed (UserId, UserName, ProductName, OrderPrice, OrderMoneyType) Values (?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = getShopConnection().getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, user.getUuid().toString());
             preparedStatement.setString(2, user.getName());
@@ -92,11 +92,11 @@ public class ShopConnection {
                 "    on orderconfirmed " +
                 "    for each row " +
                 "BEGIN " +
-                "    INSERT INTO orderconfirmedanalytics " +
-                "    SET orderconfirmedanalytics.OrderId = NEW.id, " +
-                "        orderconfirmedanalytics.ProductName = NEW.ProductName, " +
-                "        orderconfirmedanalytics.UserId = NEW.UserID, " +
-                "        orderconfirmedanalytics.OrderProcessed = false; " +
+                "    INSERT INTO order_confirmed_analytics " +
+                "    SET order_confirmed_analytics.OrderId = NEW.id, " +
+                "        order_confirmed_analytics.ProductName = NEW.ProductName, " +
+                "        order_confirmed_analytics.UserId = NEW.UserID, " +
+                "        order_confirmed_analytics.OrderProcessed = false; " +
                 "END; ";
         try (Statement statement = getShopConnection().getConnection().createStatement()) {
             statement.executeUpdate(trigger);
@@ -112,8 +112,8 @@ public class ShopConnection {
                 "BEGIN " +
                 "     select oc.id, oc.UserName, oc.ProductName, oc.OrderPrice, " +
                 "oc.OrderMoneyType, oca.CreateDate, oca.OrderProcessed " +
-                "    from orderconfirmed oc " +
-                "    join orderconfirmedanalytics oca on oc.id = oca.OrderId " +
+                "    from order_confirmed oc " +
+                "    join order_confirmedan_alytics oca on oc.id = oca.OrderId " +
                 "    where oc.UserId=UserId;" +
                 "END; ";
         try (Statement statement = getShopConnection().getConnection().createStatement()) {
@@ -127,7 +127,7 @@ public class ShopConnection {
     public void totalUserSpentMoney(User user) {
         String sum ="SELECT OrderMoneyType, " +
                 "       SUM(OrderPrice) AS UserSum " +
-                "FROM orderconfirmed oc " +
+                "FROM order_confirmed oc " +
                 "where UserId = (?) " +
                 "group by oc.OrderMoneyType";
         try (PreparedStatement preparedStatement = getShopConnection().getConnection().prepareStatement(sum,ResultSet.TYPE_SCROLL_SENSITIVE,

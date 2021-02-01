@@ -1,17 +1,15 @@
 package part2.Product;
 
 import lombok.Data;
-import part2.Warehouse.ExpiredDate;
+import lombok.NoArgsConstructor;
 
 
 @Data
+@NoArgsConstructor
 public class NoFood extends Product {
 
     private String name;
     private double price;
-
-    public NoFood() {
-    }
 
     public NoFood(String name, double price) {
         this.name = name;

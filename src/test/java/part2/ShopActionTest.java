@@ -58,7 +58,7 @@ public class ShopActionTest {
 //        assertTrue(bucket.get(user).isEmpty());
         shopService.addProductToBucket(user, bucket, productList,1);
         shopService.addProductToBucket(user, bucket, productList,4);
-        shopConnection.confirmOrder(user,1,"RUR",bucket);
+        shopConnection.confirmOrder(user,1,"BYR",bucket);
         shopConnection.callUserHistoryProcedure(user);
         shopConnection.totalUserSpentMoney(user);
     }

@@ -22,7 +22,7 @@ import java.util.Map;
 public class ShopService {
     private static Concurrency concurrency;
 
-    public void saveCustomerBucket(HashMap<User, List<Product>> bucket){
+    public void saveCustomerBucket(HashMap<User, List<Product>> bucket) {
         try {
             FileOutputStream fos = new FileOutputStream("customerBucket.bin");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -35,7 +35,7 @@ public class ShopService {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Product> downloadCustomerBucket(User user){
+    public List<Product> downloadCustomerBucket(User user) {
         List<Product> userBucket = new LinkedList<>();
         try {
             FileInputStream fis = new FileInputStream("customerBucket.bin");
@@ -43,11 +43,11 @@ public class ShopService {
             HashMap<User, List<Product>> bucket = (HashMap<User, List<Product>>) ois.readObject();
             if (bucket.get(user) != null) {
                 userBucket = bucket.get(user);
-                System.out.println("Your bucket downloaded");
+                log.info("Your bucket downloaded");
             } else System.out.println("Your bucket created");
             ois.close();
         } catch (IOException | ClassNotFoundException e) {
-            log.error("IOException during serialization." + e.getMessage());
+            log.error("IOException during serialization.");
         }
         return userBucket;
     }
@@ -55,7 +55,7 @@ public class ShopService {
     public double countBoughtPrice(double price, String paymentMethod) throws IllegalArgumentException {
         if (paymentMethod.equalsIgnoreCase("0")) {
             return price * 1.2;
-        } else if (paymentMethod.matches("[1-3]")){
+        } else if (paymentMethod.matches("[1-3]")) {
             switch (paymentMethod) {
                 case "1":
                     concurrency = new RURConcurrency();
@@ -65,10 +65,31 @@ public class ShopService {
                     break;
                 case "3":
                     concurrency = new USDConcurrency();
-                default:
+                    break;
             }
             return concurrency.countPrice(price);
         } else throw new IllegalArgumentException();
+    }
+
+    public String getMoneyType(String paymentMethod) {
+        String moneyType = "BYN";
+        if (paymentMethod.equalsIgnoreCase("0")) {
+            return moneyType;
+        }
+        if (paymentMethod.matches("[1-3]")) {
+            switch (paymentMethod) {
+                case "1":
+                    moneyType = "RUR";
+                break;
+                case "2":
+                    moneyType = "UAH";
+                break;
+                case "3":
+                    moneyType = "USD";
+                break;
+            }
+        } else throw new IllegalArgumentException();
+        return moneyType;
     }
 
     public void showProductList(Map<Integer, Product> productList) {
@@ -119,14 +140,14 @@ public class ShopService {
     }
 
     @SuppressWarnings("unchecked")
-    public User badAuthorization(String name){
+    public User badAuthorization(String name) {
         User user = new User(name);
         try {
             FileInputStream fis = new FileInputStream("customerBucket.bin");
             ObjectInputStream ois = new ObjectInputStream(fis);
             HashMap<User, List<Product>> bucket = (HashMap<User, List<Product>>) ois.readObject();
-            for (HashMap.Entry<User, List<Product>> entry : bucket.entrySet()){
-                if (entry.getKey().getName().equals(name)){
+            for (HashMap.Entry<User, List<Product>> entry : bucket.entrySet()) {
+                if (entry.getKey().getName().equals(name)) {
                     user = entry.getKey();
                     System.out.println(name + ", hello again");
                 }
@@ -137,7 +158,6 @@ public class ShopService {
         }
         return user;
     }
-
 
 
 }
