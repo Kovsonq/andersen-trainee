@@ -166,6 +166,10 @@ public class ShopService {
         shopConnection.deleteProductFromProductDbList(productId);
     }
 
+    public  HashMap<Integer, Product> getAllProductFromBucketDB() {
+       return shopConnection.getAllProductFromBucketDB();
+    }
+
     public void addProductToBucketList(int productId) {
         shopConnection.addProductToBucketDbList(productId);
     }

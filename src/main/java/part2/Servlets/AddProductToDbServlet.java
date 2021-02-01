@@ -13,8 +13,7 @@ public class AddProductToDbServlet extends javax.servlet.http.HttpServlet {
         String productPrice=request.getParameter("productPriceToDb");
 
         shopService.addProductToProductList(productName, Double.parseDouble(productPrice));
-
-        request.getRequestDispatcher("/WEB-INF/view/good-list.jsp").forward(request,response);
+        response.sendRedirect("/");
     }
 
 

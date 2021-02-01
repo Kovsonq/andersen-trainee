@@ -12,8 +12,7 @@ public class DeleteProductFromDbServlet extends javax.servlet.http.HttpServlet {
         String productId=request.getParameter("productId");
 
         shopService.deleteProductFromProductList(Integer.parseInt(productId));
-
-        request.getRequestDispatcher("/WEB-INF/view/good-list.jsp").forward(request,response);
+        response.sendRedirect("/");
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {

@@ -1,7 +1,8 @@
 <%@ page import="java.util.HashMap" %>
 <%@ page import="part2.Product.Product" %>
 <%@ page import="part2.Service.ShopService" %>
-<%@ page import="java.util.Map" %><%--
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: kovso
   Date: 30.01.2021
@@ -100,11 +101,44 @@
                 </div>
                 <div class="modal-body">
 
+                    <table class="table table-sm table-bordered">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col"># Index</th>
+                            <th scope="col">Product name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">DELETE From Bucket</th>
+                        </tr>
+                        </thead>
+                        <tbody>
 
+                        <% HashMap<Integer, Product> userBucket = shopService.getAllProductFromBucketDB();
+                        %>
+                        <% for (HashMap.Entry<Integer, Product> entry : userBucket.entrySet()) {
+                            out.println("<tr>");
+                            out.println("<th>" + entry.getKey() + "</th>\n" +
+                                    "<td>" + entry.getValue().getName() + "</td>\n" +
+                                    "<td>" + entry.getValue().getPrice() + "</td>\n" +
+                                    "<td>"+
+                                    "<form action='/delete-product-from-bucket' method='post' style='margin:0px'>" +
+                                    "<input type='text' style='display:none' name='productId' value='" +
+                                    entry.getKey() +
+                                    "'/>" +
+                                    "<button type='submit' class='btn btn-danger'>DELETE ITEM</button>" +
+                                    "</form>"
+                                    +
+                                    "</td>\n"
+                            );
+                            out.println("</tr>");
+                        }
+                        %>
+
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Confirm order</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Confirm Order</button>
                 </div>
             </div>
         </div>

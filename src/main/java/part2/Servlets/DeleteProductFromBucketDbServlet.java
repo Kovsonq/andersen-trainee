@@ -8,11 +8,10 @@ public class DeleteProductFromBucketDbServlet extends javax.servlet.http.HttpSer
     ShopService shopService = new ShopService();
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String productName=request.getParameter("productName");
+        String productId=request.getParameter("productId");
 
-        request.setAttribute("productName", productName);
-
-        request.getRequestDispatcher("/WEB-INF/view/good-list.jsp").forward(request,response);
+        shopService.deleteProductFromBucketDbList(Integer.parseInt(productId));
+        response.sendRedirect("/");
     }
 
 

@@ -14,8 +14,7 @@ public class AddProductToBucketDbServlet extends javax.servlet.http.HttpServlet 
 
         shopService.addProductToBucketList(Integer.parseInt(productId));
         request.setAttribute("productName", productName);
-
-        request.getRequestDispatcher("/WEB-INF/view/good-list.jsp").forward(request,response);
+        response.sendRedirect("/");
     }
 
 

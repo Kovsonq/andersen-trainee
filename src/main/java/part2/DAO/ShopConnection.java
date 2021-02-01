@@ -8,6 +8,7 @@ import part2.Product.User;
 
 import java.sql.*;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 @Slf4j
@@ -90,7 +91,7 @@ public class ShopConnection {
     }
 
     public void createTriggerForAnalyticsTable() {
-        String trigger ="CREATE DEFINER = root@localhost trigger OrderAnalyticsTable " +
+        String trigger = "CREATE DEFINER = root@localhost trigger OrderAnalyticsTable " +
                 "    after insert " +
                 "    on order_confirmed " +
                 "    for each row " +
@@ -110,7 +111,7 @@ public class ShopConnection {
     }
 
     public void createUserHistoryProcedure() {
-        String procedure ="create definer = root@localhost " +
+        String procedure = "create definer = root@localhost " +
                 "procedure UserHistory(IN UserId varchar(255)) comment 'no comments' " +
                 "BEGIN " +
                 "     select oc.id, oc.UserName, oc.ProductName, oc.OrderPrice, " +
@@ -128,12 +129,12 @@ public class ShopConnection {
     }
 
     public void totalUserSpentMoney(User user) {
-        String sum ="SELECT OrderMoneyType, " +
+        String sum = "SELECT OrderMoneyType, " +
                 "       SUM(OrderPrice) AS UserSum " +
                 "FROM order_confirmed oc " +
                 "where UserId = (?) " +
                 "group by oc.OrderMoneyType";
-        try (PreparedStatement preparedStatement = getShopConnection().getConnection().prepareStatement(sum,ResultSet.TYPE_SCROLL_SENSITIVE,
+        try (PreparedStatement preparedStatement = getShopConnection().getConnection().prepareStatement(sum, ResultSet.TYPE_SCROLL_SENSITIVE,
                 ResultSet.CONCUR_UPDATABLE)) {
             preparedStatement.setString(1, user.getUuid().toString());
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -147,17 +148,17 @@ public class ShopConnection {
         }
     }
 
-    public HashMap<Integer, Product> getAllProductFromDB (){
+    public HashMap<Integer, Product> getAllProductFromDB() {
         HashMap<Integer, Product> products = new HashMap<>();
-        String sql ="SELECT * " +
+        String sql = "SELECT * " +
                 "FROM product_list ";
         try (Statement statement = getShopConnection().getConnection().createStatement()) {
-            ResultSet resultSet =  statement.executeQuery(sql);
+            ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 String productName = resultSet.getString("productName");
                 double productPrice = resultSet.getDouble("productPrice");
-                if (resultSet.getDate("expiredDate") == null){
-                    Product product = new NoFood(productName,productPrice);
+                if (resultSet.getDate("expiredDate") == null) {
+                    Product product = new NoFood(productName, productPrice);
                     products.put(resultSet.getInt("Id"), product);
                 } else {
                     Date expiredDate = resultSet.getDate("expiredDate");
@@ -193,6 +194,33 @@ public class ShopConnection {
         } catch (SQLException e) {
             log.error("Product deleting from DB failed...");
         }
+    }
+
+    public HashMap<Integer, Product> getAllProductFromBucketDB() {
+        HashMap<Integer, Product> bucketProducts = new HashMap<>();
+        String sql = "SELECT ub.id, pl.id, pl.ProductName, pl.ProductPrice, pl.expiredDate " +
+                "FROM user_bucket ub " +
+                "JOIN product_list pl on ub.ProductId=pl.id ";
+        try (Statement statement = getShopConnection().getConnection().createStatement()) {
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                Integer productInUserBucketId = resultSet.getInt("id");
+                String productName = resultSet.getString("productName");
+                double productPrice = resultSet.getDouble("productPrice");
+                Product product;
+                if (resultSet.getDate("expiredDate") == null) {
+                    product = new NoFood(productName, productPrice);
+                } else {
+                    Date expiredDate = resultSet.getDate("expiredDate");
+                    product = new Food(productName, productPrice, expiredDate);
+                }
+                bucketProducts.put(productInUserBucketId, product);
+            }
+            log.info("Got bucket products");
+        } catch (SQLException exception) {
+            log.error("Getting bucket product from DB failed...");
+        }
+        return bucketProducts;
     }
 
     public void addProductToBucketDbList(int productId) {
