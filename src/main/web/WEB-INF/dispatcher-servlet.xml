@@ -23,4 +23,23 @@
         <property name="suffix" value=".jsp" />
     </bean>
 
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/test?useSSL=false"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+    </bean>
+
+    <!-- Here we're defining JDBCTemplate bean -->
+    <bean id="jdbcTemplateDeveloperDao"
+          class="part2.DAO.JdbcTemplateProductImpl">
+        <property name="dataSource"  ref="dataSource" />
+    </bean>
+
+    <bean id="productWebService"
+          class="part2.Service.ProductWebService">
+        <constructor-arg name="jdbcTemplateProduct" ref="jdbcTemplateDeveloperDao"/>
+    </bean>
+
 </beans>

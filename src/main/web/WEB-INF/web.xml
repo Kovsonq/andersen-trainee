@@ -11,7 +11,7 @@
         <servlet-name>spring</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
-<!--            contextConfigLocation init-param is used to provide the location of spring bean configuration file.-->
+            <!-- contextConfigLocation init-param is used to provide the location of spring bean configuration file.-->
             <param-name>contextConfigLocation</param-name>
             <param-value>/WEB-INF/dispatcher-servlet.xml</param-value>
         </init-param>
@@ -34,41 +34,41 @@
 <!--    </servlet-mapping>-->
 
 
-    <servlet>
-        <servlet-name>AddProductToDbServlet</servlet-name>
-        <servlet-class>part2.Servlets.AddProductToDbServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>AddProductToDbServlet</servlet-name>
-        <url-pattern>/add-product</url-pattern>
-    </servlet-mapping>
+<!--    <servlet>-->
+<!--        <servlet-name>AddProductToDbServlet</servlet-name>-->
+<!--        <servlet-class>part2.Servlets.AddProductToDbServlet</servlet-class>-->
+<!--    </servlet>-->
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>AddProductToDbServlet</servlet-name>-->
+<!--        <url-pattern>/add-product</url-pattern>-->
+<!--    </servlet-mapping>-->
 
-    <servlet>
-        <servlet-name>DeleteProductFromDbServlet</servlet-name>
-        <servlet-class>part2.Servlets.DeleteProductFromDbServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>DeleteProductFromDbServlet</servlet-name>
-        <url-pattern>/delete-product</url-pattern>
-    </servlet-mapping>
+<!--    <servlet>-->
+<!--        <servlet-name>DeleteProductFromDbServlet</servlet-name>-->
+<!--        <servlet-class>part2.Servlets.DeleteProductFromDbServlet</servlet-class>-->
+<!--    </servlet>-->
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>DeleteProductFromDbServlet</servlet-name>-->
+<!--        <url-pattern>/delete-product</url-pattern>-->
+<!--    </servlet-mapping>-->
 
 
-    <servlet>
-        <servlet-name>AddProductToBucketDbServlet</servlet-name>
-        <servlet-class>part2.Servlets.AddProductToBucketDbServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>AddProductToBucketDbServlet</servlet-name>
-        <url-pattern>/add-product-to-bucket</url-pattern>
-    </servlet-mapping>
+<!--    <servlet>-->
+<!--        <servlet-name>AddProductToBucketDbServlet</servlet-name>-->
+<!--        <servlet-class>part2.Servlets.AddProductToBucketDbServlet</servlet-class>-->
+<!--    </servlet>-->
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>AddProductToBucketDbServlet</servlet-name>-->
+<!--        <url-pattern>/add-product-to-bucket</url-pattern>-->
+<!--    </servlet-mapping>-->
 
-    <servlet>
-        <servlet-name>DeleteProductFromBucketDbServlet</servlet-name>
-        <servlet-class>part2.Servlets.DeleteProductFromBucketDbServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>DeleteProductFromBucketDbServlet</servlet-name>
-        <url-pattern>/delete-product-from-bucket</url-pattern>
-    </servlet-mapping>
+<!--    <servlet>-->
+<!--        <servlet-name>DeleteProductFromBucketDbServlet</servlet-name>-->
+<!--        <servlet-class>part2.Servlets.DeleteProductFromBucketDbServlet</servlet-class>-->
+<!--    </servlet>-->
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>DeleteProductFromBucketDbServlet</servlet-name>-->
+<!--        <url-pattern>/delete-product-from-bucket</url-pattern>-->
+<!--    </servlet-mapping>-->
 
 </web-app>
