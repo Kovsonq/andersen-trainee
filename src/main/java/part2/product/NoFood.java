@@ -1,8 +1,18 @@
-package part2.product;
+package part2.Product;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
+@Data
+@NoArgsConstructor
 public class NoFood extends Product {
 
+    private String name;
+    private double price;
+
     public NoFood(String name, double price) {
-        super(name, price);
+        this.name = name;
+        this.price = price;
     }
 }

@@ -11,10 +11,6 @@ import part2.Service.Concurrency.UAHConcurrency;
 import part2.Service.Concurrency.USDConcurrency;
 
 import java.io.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,7 +48,7 @@ public class ShopService {
             } else System.out.println("Your bucket created");
             ois.close();
         } catch (IOException | ClassNotFoundException e) {
-            log.error("IOException during serialization." + e.getMessage());
+            log.error("IOException during serialization.");
         }
         return userBucket;
     }
@@ -70,10 +66,31 @@ public class ShopService {
                     break;
                 case "3":
                     concurrency = new USDConcurrency();
-                default:
+                break;
             }
             return concurrency.countPrice(price);
         } else throw new IllegalArgumentException();
+    }
+
+    public String getMoneyType(String paymentMethod) {
+        String moneyType = "BYN";
+        if (paymentMethod.equalsIgnoreCase("0")) {
+            return moneyType;
+        }
+        if (paymentMethod.matches("[1-3]")) {
+            switch (paymentMethod) {
+                case "1":
+                    moneyType = "RUR";
+                    break;
+                case "2":
+                    moneyType = "UAH";
+                    break;
+                case "3":
+                    moneyType = "USD";
+                    break;
+            }
+        } else throw new IllegalArgumentException();
+        return moneyType;
     }
 
     public void showProductList(Map<Integer, Product> productList) {
@@ -130,12 +147,7 @@ public class ShopService {
             FileInputStream fis = new FileInputStream("customerBucket.bin");
             ObjectInputStream ois = new ObjectInputStream(fis);
             HashMap<User, List<Product>> bucket = (HashMap<User, List<Product>>) ois.readObject();
-            for (HashMap.Entry<User, List<Product>> entry : bucket.entrySet()){
-                if (entry.getKey().getName().equals(name)){
-                    user = entry.getKey();
-                    System.out.println(name + ", hello again");
-                }
-            }
+            user = bucket.keySet().stream().filter(u -> u.getName().equals(name)).findFirst().orElse(user);
             ois.close();
         } catch (IOException | ClassNotFoundException e) {
             log.error("That's first start of the app, hello customer!");

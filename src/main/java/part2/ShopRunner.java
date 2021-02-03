@@ -102,20 +102,9 @@ public class ShopRunner {
                                     "'3' USD");
                             String concurrency = input.nextLine();
 
-                            String moneyType = "BYN";
-                            switch (concurrency) {
-                                case "1":
-                                    moneyType = "RUR";
-                                    break;
-                                case "2":
-                                    moneyType = "UAH";
-                                    break;
-                                case "3":
-                                    moneyType = "USD";
-                                    break;
-                            }
                             try {
                                 double price = shopService.countBoughtPrice(bucket.get(user).get(Integer.parseInt(item)).getPrice(), concurrency);
+                                String moneyType = shopService.getMoneyType(concurrency);
                                 System.out.println("Your price for " +
                                         bucket.get(user).get(Integer.parseInt(item)).getName() + " is: " + price + " " + moneyType);
 
@@ -127,9 +116,8 @@ public class ShopRunner {
                                     if (confirm.equalsIgnoreCase("n")){
                                         break;
                                     } else if (confirm.equalsIgnoreCase("y")){
-
                                         shopService.confirmOrder(user, Integer.parseInt(item), moneyType, bucket);
-
+                                        break;
                                     } else System.out.println("Incorrect symbol: " + "'" + confirm + "'" + " try again.");
                                 }
                                 break;
