@@ -5,16 +5,20 @@ import part2.Product.Food;
 import part2.Product.NoFood;
 import part2.Product.Product;
 
+import part2.Product.User;
+import part2.DAO.ShopConnection;
+
 import part2.Service.ShopService;
 
 import java.util.*;
 
 public class ShopRunner {
     public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
         ShopService shopService = new ShopService();
 
         Map<Integer, Product> productList = new HashMap<>();
-        List<Product> bucket = new LinkedList<>();
+        HashMap<User, List<Product>> bucket = new HashMap<>();
 
         productList.put(1, new Food("Bread", 4));
         productList.put(2, new Food("Tomato", 5));
@@ -23,9 +27,13 @@ public class ShopRunner {
         productList.put(5, new NoFood("Knife", 12));
         productList.put(6, new NoFood("Cup", 8));
 
-        shopService.showHome();
 
-        Scanner input = new Scanner(System.in);
+        System.out.print("Type your name:");
+        String userName = input.nextLine();
+        User user = shopService.badAuthorization(userName);
+        bucket.put(user, shopService.downloadCustomerBucket(user));
+
+        shopService.showHome();
 
         while (input.hasNext()) {
             String action = input.nextLine();
@@ -37,8 +45,10 @@ public class ShopRunner {
                     shopService.saveCustomerBucket(bucket);
                     System.exit(0);
 
-                case "download":
-                    bucket = shopService.downloadCustomerBucket();
+                //show history
+                case "history":
+                    shopService.callUserHistoryProcedure(user);
+                    shopService.totalUserSpentMoney(user);
                     break;
 
                 //show productList
@@ -52,7 +62,8 @@ public class ShopRunner {
                         order = input.nextLine();
                         if (order.equalsIgnoreCase("finish")) break;
                         if (order.matches("[0-9]*") && productList.containsKey(Integer.parseInt(order))) {
-                            shopService.addProductToBucket(bucket, productList, Integer.parseInt(order));
+
+                            shopService.addProductToBucket(user, bucket, productList, Integer.parseInt(order));
 
                         } else System.out.println("Can't find any Product by this key");
 
@@ -66,10 +77,10 @@ public class ShopRunner {
                 case "b": {
                     System.out.println("Type: \n" +
                             "- 'buy' if you want to buy smth from bucket\n" +
-                            "- 'index' if you want to remove a Product from the bucket \n" +
+                            "- 'index of the product' if you want to remove the Product from the bucket \n" +
                             "- 'all' to clear your bucket\n" +
                             "- 'finish' to go home");
-                    shopService.showBucket(bucket);
+                    shopService.showBucket(user, bucket);
 
 
                     //Workflow in the bucket
@@ -85,10 +96,10 @@ public class ShopRunner {
                             String item = input.nextLine();
 
                             System.out.println("Please, select concurrency for payment\n" +
-                                    "- 0 BYN\n" +
-                                    "- 1 RUR\n" +
-                                    "- 2 UAH\n" +
-                                    "- 3 USD");
+                                    "'0' BYN\n" +
+                                    "'1' RUR\n" +
+                                    "'2' UAH\n" +
+                                    "'3' USD");
                             String concurrency = input.nextLine();
 
                             String moneyType = "BYN";
@@ -104,19 +115,33 @@ public class ShopRunner {
                                     break;
                             }
                             try {
-                                double price = shopService.countBoughtPrice(bucket.get(Integer.parseInt(item)).getPrice(), concurrency);
+                                double price = shopService.countBoughtPrice(bucket.get(user).get(Integer.parseInt(item)).getPrice(), concurrency);
                                 System.out.println("Your price for " +
-                                        bucket.get(Integer.parseInt(item)).getName() + " is: " + price + " " + moneyType);
+                                        bucket.get(user).get(Integer.parseInt(item)).getName() + " is: " + price + " " + moneyType);
+
+                                System.out.println("Do you confirm the order for this Product?\n" +
+                                        "'y' - to approve\n" +
+                                        "'n' - to cancel");
+                                String confirm = input.nextLine();
+                                while (true) {
+                                    if (confirm.equalsIgnoreCase("n")){
+                                        break;
+                                    } else if (confirm.equalsIgnoreCase("y")){
+
+                                        shopService.confirmOrder(user, Integer.parseInt(item), moneyType, bucket);
+
+                                    } else System.out.println("Incorrect symbol: " + "'" + confirm + "'" + " try again.");
+                                }
                                 break;
                             } catch (IllegalArgumentException exception) {
                                 System.out.println("Illegal index of concurrency");
                             }
                         } else if (remove.equalsIgnoreCase("all")) {
-                            shopService.removeAllProductFromBucket(bucket);
-                            shopService.showBucket(bucket);
+                            shopService.removeAllProductFromBucket(user, bucket);
+                            shopService.showBucket(user, bucket);
                         } else if (remove.matches("[0-9]*")) {
-                            shopService.removeOneProductFromBucketByKey(bucket, Integer.parseInt(remove));
-                            shopService.showBucket(bucket);
+                            shopService.removeOneProductFromBucketByKey(user, bucket, Integer.parseInt(remove));
+                            shopService.showBucket(user, bucket);
                         } else System.out.println("Can't find any Product by this key");
                     }
                     shopService.showHome();
