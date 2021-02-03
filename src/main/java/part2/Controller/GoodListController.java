@@ -13,9 +13,9 @@ import java.util.HashMap;
 @Controller
 public class GoodListController {
 
-    @Autowired
     private final ProductWebService productWebService;
 
+    @Autowired
     public GoodListController(ProductWebService productWebService) {
         this.productWebService = productWebService;
     }
