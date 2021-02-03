@@ -1,5 +1,6 @@
 package part2.Service;
 
+
 import lombok.extern.slf4j.Slf4j;
 import part2.DAO.ShopConnection;
 import part2.Product.Product;
@@ -177,6 +178,5 @@ public class ShopService {
     public void deleteProductFromBucketDbList(int productInBucketId) {
         shopConnection.deleteProductFromBucketDbList(productInBucketId);
     }
-
 
 }

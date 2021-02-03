@@ -6,12 +6,14 @@ import org.junit.Test;
 import part2.Product.User;
 import part2.DAO.ShopConnection;
 import part2.Service.ShopService;
+
 import part2.Product.Food;
 import part2.Product.NoFood;
 import part2.Product.Product;
 import part2.Warehouse.Warehouse;
 
 import java.util.*;
+
 
 import static org.junit.Assert.*;
 
@@ -21,6 +23,7 @@ public class ShopActionTest {
     HashMap<User, List<Product>> bucket  = new HashMap<>();
     List<Product> userBucket = new LinkedList<>();
     User user = new User("Alex");
+
 
     @Test
     public void addProductToTheWarehouseTest(){
@@ -34,6 +37,7 @@ public class ShopActionTest {
         }
         assertNotNull(food.getExpiredDate());
     }
+
 
 
     @Before
@@ -128,8 +132,10 @@ public class ShopActionTest {
 
         shopService.saveCustomerBucket(bucket);
         List<Product> bucketAfterSerializationDeserialization =
+
                 shopService.downloadCustomerBucket(user);
         assertEquals(bucketAfterSerializationDeserialization, bucket.get(user));
+
     }
 
 }

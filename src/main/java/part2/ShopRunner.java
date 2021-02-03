@@ -1,10 +1,13 @@
 package part2;
 
+
 import part2.Product.Food;
 import part2.Product.NoFood;
 import part2.Product.Product;
+
 import part2.Product.User;
 import part2.DAO.ShopConnection;
+
 import part2.Service.ShopService;
 
 import java.util.*;
@@ -38,6 +41,7 @@ public class ShopRunner {
             switch (action) {
                 //exit case
                 case "exit":
+
                     shopService.saveCustomerBucket(bucket);
                     System.exit(0);
 
@@ -54,15 +58,20 @@ public class ShopRunner {
                     //add Product in the bucket
                     String order;
                     while (true) {
+
                         order = input.nextLine();
                         if (order.equalsIgnoreCase("finish")) break;
                         if (order.matches("[0-9]*") && productList.containsKey(Integer.parseInt(order))) {
+
                             shopService.addProductToBucket(user, bucket, productList, Integer.parseInt(order));
+
                         } else System.out.println("Can't find any Product by this key");
+
                     }
                     shopService.showHome();
                     break;
                 }
+
 
                 // show Product in your bucket
                 case "b": {
@@ -72,6 +81,7 @@ public class ShopRunner {
                             "- 'all' to clear your bucket\n" +
                             "- 'finish' to go home");
                     shopService.showBucket(user, bucket);
+
 
                     //Workflow in the bucket
                     while (true) {
@@ -148,3 +158,4 @@ public class ShopRunner {
     }
 }
 }
+
