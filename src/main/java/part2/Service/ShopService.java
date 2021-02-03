@@ -146,12 +146,7 @@ public class ShopService {
             FileInputStream fis = new FileInputStream("customerBucket.bin");
             ObjectInputStream ois = new ObjectInputStream(fis);
             HashMap<User, List<Product>> bucket = (HashMap<User, List<Product>>) ois.readObject();
-            for (HashMap.Entry<User, List<Product>> entry : bucket.entrySet()) {
-                if (entry.getKey().getName().equals(name)) {
-                    user = entry.getKey();
-                    System.out.println(name + ", hello again");
-                }
-            }
+            user = bucket.keySet().stream().filter(u -> u.getName().equals(name)).findFirst().orElse(user);
             ois.close();
         } catch (IOException | ClassNotFoundException e) {
             log.error("That's first start of the app, hello customer!");
