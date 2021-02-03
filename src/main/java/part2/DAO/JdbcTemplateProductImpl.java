@@ -1,6 +1,7 @@
 package part2.DAO;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 import part2.Product.Food;
 import part2.Product.NoFood;
 import part2.Product.Product;
