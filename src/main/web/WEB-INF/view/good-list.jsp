@@ -61,8 +61,7 @@
         </thead>
         <tbody>
 
-        <% ShopService shopService = new ShopService();
-            HashMap<Integer, Product> products = shopService.getAllProductFromDB();
+        <% HashMap<Integer, Product> products = (HashMap<Integer, Product>) request.getAttribute("productList");
         %>
         <% for (HashMap.Entry<Integer, Product> entry : products.entrySet()) {
             out.println("<tr>");
@@ -112,7 +111,7 @@
                         </thead>
                         <tbody>
 
-                        <% HashMap<Integer, Product> userBucket = shopService.getAllProductFromBucketDB();
+                        <% HashMap<Integer, Product> userBucket = (HashMap<Integer, Product>) request.getAttribute("bucketList");
                         %>
                         <% for (HashMap.Entry<Integer, Product> entry : userBucket.entrySet()) {
                             out.println("<tr>");
