@@ -20,6 +20,7 @@
         <servlet-api-version>2.5</servlet-api-version>
         <jsp-api-version>2.2</jsp-api-version>
         <jstl-version>1.2</jstl-version>
+        <spring-security-oauth2-version>2.3.5.RELEASE</spring-security-oauth2-version>
     </properties>
 
     <build>
@@ -109,7 +110,7 @@
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
-            <version>2.3.5.RELEASE</version>
+            <version>${spring-security-oauth2-version}</version>
         </dependency>
 
         <!-- Servlet -->
