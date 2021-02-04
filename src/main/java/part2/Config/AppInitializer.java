@@ -1,10 +1,8 @@
 package part2.Config;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.context.support.GenericWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.ServletContext;
@@ -21,7 +19,7 @@ public class AppInitializer implements WebApplicationInitializer {
         rootContext.setServletContext(container);
 
         // Manage the lifecycle of the root application context
-        container.addListener(new ContextLoaderListener(rootContext));
+//        container.addListener(new ContextLoaderListener(rootContext));
 
         // Register and map the dispatcher servlet
         ServletRegistration.Dynamic appServlet = container.addServlet("dispatcher", new DispatcherServlet(rootContext));

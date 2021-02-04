@@ -17,4 +17,5 @@ public abstract class Product implements Serializable {
         this.name = name;
         this.price = price;
     }
+
 }
