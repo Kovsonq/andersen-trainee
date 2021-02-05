@@ -26,4 +26,5 @@ public class Food extends Product {
         this.price = price;
         this.expiredDate = expiredDate;
     }
+
 }

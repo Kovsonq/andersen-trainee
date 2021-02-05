@@ -17,4 +17,5 @@ public class NoFood extends Product {
         this.name = name;
         this.price = price;
     }
+
 }
