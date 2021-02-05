@@ -1,20 +1,19 @@
-package part2.Product;
+package part2.Model.Product;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import part2.Warehouse.ExpiredDate;
 
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
 public class Food extends Product {
 
     @ExpiredDate
     private Date expiredDate;
     private String name;
     private double price;
-
-    public Food(){
-    }
 
     public Food(String name, double price) {
         this.name = name;
@@ -26,5 +25,4 @@ public class Food extends Product {
         this.price = price;
         this.expiredDate = expiredDate;
     }
-
 }

@@ -3,8 +3,8 @@ package part2.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import part2.DAO.ShopConnection;
-import part2.Product.Product;
-import part2.Product.User;
+import part2.Model.Product.Product;
+import part2.Model.Product.User;
 import part2.Service.Concurrency.Concurrency;
 import part2.Service.Concurrency.RURConcurrency;
 import part2.Service.Concurrency.UAHConcurrency;

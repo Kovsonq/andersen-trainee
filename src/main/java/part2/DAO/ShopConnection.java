@@ -1,14 +1,13 @@
 package part2.DAO;
 
 import lombok.extern.slf4j.Slf4j;
-import part2.Product.Food;
-import part2.Product.NoFood;
-import part2.Product.Product;
-import part2.Product.User;
+import part2.Model.Product.Food;
+import part2.Model.Product.NoFood;
+import part2.Model.Product.Product;
+import part2.Model.Product.User;
 
 import java.sql.*;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 @Slf4j

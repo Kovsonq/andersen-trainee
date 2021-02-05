@@ -1,9 +1,9 @@
 package part2.Warehouse;
 
 import lombok.SneakyThrows;
-import part2.Product.Food;
-import part2.Product.NoFood;
-import part2.Product.Product;
+import part2.Model.Product.Food;
+import part2.Model.Product.NoFood;
+import part2.Model.Product.Product;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

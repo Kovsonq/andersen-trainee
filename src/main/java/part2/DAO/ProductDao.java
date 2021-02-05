@@ -1,11 +1,9 @@
 package part2.DAO;
 
-import part2.Product.Product;
-import part2.Product.User;
+import part2.Model.Product.Product;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
-import java.util.List;
 
 public interface ProductDao {
 

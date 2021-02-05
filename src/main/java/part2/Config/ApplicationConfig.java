@@ -3,8 +3,13 @@ package part2.Config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -15,8 +20,22 @@ import part2.Service.ProductWebService;
 @EnableWebMvc
 @Configuration
 @EnableTransactionManagement
+@EnableJpaRepositories(basePackages = "part2")
 @ComponentScan(basePackages = "part2")
 public class ApplicationConfig implements WebMvcConfigurer {
+
+    @Bean(name="entityManagerFactory")
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        vendorAdapter.setGenerateDdl(true);
+
+        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+        factory.setJpaVendorAdapter(vendorAdapter);
+        factory.setPackagesToScan("part2");
+        factory.setDataSource(getDriverManagerDataSource());
+        return factory;
+    }
 
     @Bean
     public InternalResourceViewResolver configureViewResolvers() {
@@ -36,9 +55,18 @@ public class ApplicationConfig implements WebMvcConfigurer {
         return dataSource;
     }
 
-    @Bean
-    public DataSourceTransactionManager dataSourceTransactionManager() {
-        return new DataSourceTransactionManager(getDriverManagerDataSource());
+//    @Bean
+//    public DataSourceTransactionManager dataSourceTransactionManager() {
+//        return new DataSourceTransactionManager(getDriverManagerDataSource());
+//    }
+
+    @Bean(name = "transactionManager")
+    public PlatformTransactionManager transactionManager(){
+        JpaTransactionManager transactionManager
+                = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(
+                entityManagerFactory().getObject() );
+        return transactionManager;
     }
 
     @Bean

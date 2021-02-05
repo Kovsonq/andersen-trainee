@@ -1,8 +1,9 @@
 <%@ page import="java.util.HashMap" %>
-<%@ page import="part2.Product.Product" %>
+<%@ page import="part2.Model.Product.Product" %>
 <%@ page import="part2.Service.ShopService" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="part2.Model.Bucket" %><%--
   Created by IntelliJ IDEA.
   User: kovso
   Date: 30.01.2021
@@ -10,6 +11,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <html lang="en">
 
 <head>
@@ -111,17 +113,19 @@
                         </thead>
                         <tbody>
 
-                        <% HashMap<Integer, Product> userBucket = (HashMap<Integer, Product>) request.getAttribute("bucketList");
+                        <%
+//                            <Integer, Product> userBucket = (HashMap<Integer, Product>) request.getAttribute("bucketList");
+                        List<Bucket> bucketList = (List<Bucket>) request.getAttribute("productInBucket");
                         %>
-                        <% for (HashMap.Entry<Integer, Product> entry : userBucket.entrySet()) {
+                        <% for (Bucket bucket : bucketList) {
                             out.println("<tr>");
-                            out.println("<th>" + entry.getKey() + "</th>\n" +
-                                    "<td>" + entry.getValue().getName() + "</td>\n" +
-                                    "<td>" + entry.getValue().getPrice() + "</td>\n" +
+                            out.println("<th>" + bucket.getId() + "</th>\n" +
+                                    "<td>" + bucket.getBucketProduct().get(0).getProductName() + "</td>\n" +
+                                    "<td>" + bucket.getBucketProduct().get(0).getProductPrice() + "</td>\n" +
                                     "<td>"+
                                     "<form action='/delete-product-from-bucket' method='post' style='margin:0px'>" +
                                     "<input type='text' style='display:none' name='productId' value='" +
-                                    entry.getKey() +
+                                    bucket.getId() +
                                     "'/>" +
                                     "<button type='submit' class='btn btn-danger'>DELETE ITEM</button>" +
                                     "</form>"
@@ -131,6 +135,24 @@
                             out.println("</tr>");
                         }
                         %>
+<%--                        <% for (HashMap.Entry<Integer, Product> entry : userBucket.entrySet()) {--%>
+<%--                            out.println("<tr>");--%>
+<%--                            out.println("<th>" + entry.getKey() + "</th>\n" +--%>
+<%--                                    "<td>" + entry.getValue().getName() + "</td>\n" +--%>
+<%--                                    "<td>" + entry.getValue().getPrice() + "</td>\n" +--%>
+<%--                                    "<td>"+--%>
+<%--                                    "<form action='/delete-product-from-bucket' method='post' style='margin:0px'>" +--%>
+<%--                                    "<input type='text' style='display:none' name='productId' value='" +--%>
+<%--                                    entry.getKey() +--%>
+<%--                                    "'/>" +--%>
+<%--                                    "<button type='submit' class='btn btn-danger'>DELETE ITEM</button>" +--%>
+<%--                                    "</form>"--%>
+<%--                                    +--%>
+<%--                                    "</td>\n"--%>
+<%--                            );--%>
+<%--                            out.println("</tr>");--%>
+<%--                        }--%>
+<%--                        %>--%>
 
                         </tbody>
                     </table>
