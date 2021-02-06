@@ -1,4 +1,4 @@
-package part2.Product;
+package part2.Model.Product;
 
 import lombok.Data;
 

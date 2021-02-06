@@ -1,10 +1,9 @@
 package part2.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import part2.DAO.JdbcTemplateProductImpl;
-import part2.Product.Product;
+import part2.Model.Product.Product;
 
 import java.util.HashMap;
 

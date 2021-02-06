@@ -1,12 +1,11 @@
 package part2;
 
 
-import part2.Product.Food;
-import part2.Product.NoFood;
-import part2.Product.Product;
+import part2.Model.Product.Food;
+import part2.Model.Product.NoFood;
+import part2.Model.Product.Product;
 
-import part2.Product.User;
-import part2.DAO.ShopConnection;
+import part2.Model.Product.User;
 
 import part2.Service.ShopService;
 
